@@ -7,6 +7,7 @@ import tempfile
 import base64
 import numpy as np
 import os
+import shutil
 
 # Today's date
 st.set_page_config(page_title="J4 Energy Solutions - Solar Investment Calculator", layout="wide")
@@ -692,8 +693,13 @@ def generate_proposal_html():
 
 # --- Proposal Section ---
 # Setup wkhtmltopdf path and config
-path_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
-config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+path_wkhtmltopdf = shutil.which("wkhtmltopdf")
+
+if path_wkhtmltopdf is None:
+    st.error("⚠️ wkhtmltopdf executable not found. PDF generation will not work.")
+else:
+
+    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 
 # Suppress print media lookup, smart shrinking, etc.
 options = {
